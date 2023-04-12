@@ -16,7 +16,7 @@
   margin-right: 0!important;
 }
 .App-header {
-  min-height: 100vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,4 +36,22 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.link{
+  color: #000000DE;
+  text-decoration: none;
+}
+.swiperImages{
+  width: 175px;
+  height: 175px;
+  object-fit: cover;
+  list-style: none;
+}
+
+@media only screen and (max-width: 770px) {
+  .swiperImages{
+    width: 100px
+  }
+
 }
