@@ -11,7 +11,7 @@ import Skeleton from "@mui/material/Skeleton";
 import Box from "@mui/material/Box";
 import { CircularProgress, IconButton, LinearProgress, Stack } from "@mui/material";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import "../Lot.css";
+import "../styles/Lot.css";
 
 const SingleLot = () => {
   const Loading = () => {
@@ -45,7 +45,7 @@ const SingleLot = () => {
           className="container"
           sx={{
             backgroundColor: "background.default",
-            color: "text.primary",
+            color: "#36395A",
             p: 5,
             alignItems: "center",
             justifyContent: "center",
@@ -59,10 +59,17 @@ const SingleLot = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6} className="containerDesc">
+          
             <h1>{`${lot?.name}`}</h1>
-            <h1> {`${lot?.price}`} $</h1>
-            <h3>Description:</h3>
+            <h1>Start price: {`${lot?.price}`} $</h1>
             <p>{`${lot?.description}`}</p>
+            
+            <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 5}}>
+              <button className="button-30" role="button">Place a bid</button>
+              <IconButton>
+                  <BookmarkIcon sx={{color:'#36395A'}} />
+              </IconButton>
+            </Box> 
           </Grid>
         </Grid>
       )}

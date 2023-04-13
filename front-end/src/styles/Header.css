@@ -1,0 +1,185 @@
+/*Rainbow card*/
+.card {
+    --background: #f5f5f5;
+    --green: #344e41;
+    --yellow: #a3b18a;
+    --orange: #588157;
+    --red: #3a5a40;
+    --violet: #dad7cd;
+    width: 340px;
+    height: 474px;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    position: relative;
+    overflow: hidden;
+    background: var(--background);
+    padding: 1rem;
+    margin: 4rem;
+    border: 3px solid var(--violet);
+    box-shadow: 15px -15px 0 -4.5px var(--background), 15px -15px var(--yellow),
+           30px -30px 0 -4.5px var(--background), 30px -30px var(--orange), 
+           45px -45px 0 -4.5px var(--background), 45px -45px var(--red), 
+           60px -60px 0 -4.5px var(--background), 60px -60px var(--green);
+    transition: box-shadow 1s, top 1s, left 1s;
+   }
+   
+   
+   /*Hover*/
+   .card:hover {
+    box-shadow: 0 0 0 -4.5px var(--background), 0 0 0 0 var(--yellow),
+         0 0 0 -4.5px var(--background), 0 0 0 0  var(--orange),
+         0 0 0 -4.5px var(--background), 0 0 0 0  var(--red),
+         0 0 0 -4.5px  var(--background), 4.5px 4.5px 4.5px 4.5px  var(--green);
+   }
+
+
+   div.temporary_text {
+    align-self: center;
+    text-align: justify;
+    font-size: 27px;
+    padding: 6px 12px;
+    color: var(--orange);
+    font-family: 'Poppins', sans-serif;
+    
+  }
+  
+  .card_title {
+    font-weight: bold;
+  }
+  
+  .card_content {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+      /* edit the width to fit card */
+    width: 100%;
+    padding: 20px;
+    background: var(--violet);
+    border-top-left-radius: 20px;
+      /* edit here to change the height of the content box */
+    transform: translateY(150px);
+    transition: transform .5s;
+  }
+  
+  
+  
+  .card_description {
+    text-align: left;
+    font-size: 27px;
+    color: var(--green);
+    opacity: 0;
+    transition: opacity .5s;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .card:hover .card_content {
+    transform: translateY(0);
+  }
+  
+  .card:hover .card_description {
+    opacity: 1;
+    transition-delay: .25s;
+  }
+  .card:hover .temporary_text {
+    opacity: 0;
+
+    transform: translateY(4rem);
+  }
+
+  .header-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 3%;
+  }
+
+  .poster {
+    width: 53rem;
+    height: 35rem;
+    background-color: #dad7cd;
+    border-radius: 20px;
+    padding: 4rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+   }
+   
+
+   .header-text{
+    font-size: 72px;
+    color: #344e41;
+   }
+
+   .header-description{
+    font-size: 18px;
+    color: #3a5a40;
+   }
+
+
+
+   .header-container a {
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .header-container a::before,
+  .header-container a::after {
+   content: '';
+    position: absolute;
+    width: 100%;
+    left: 0;
+  }
+  .header-container a::before {
+    background-color: #344e41;
+    height: 2px;
+    bottom: 0;
+    transform-origin: 100% 50%;
+    transform: scaleX(0);
+    transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+  .header-container a::after {
+    content: attr(data-replace);
+    height: 100%;
+    top: 0;
+    transform-origin: 100% 50%;
+    transform: translate3d(200%, 0, 0);
+    transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
+    color: #344e41;
+  }
+  
+  .header-container a:hover::before {
+    transform-origin: 0% 50%;
+    transform: scaleX(1);
+  }
+  .header-container a:hover::after {
+    transform: translate3d(0, 0, 0);
+  }
+  
+  .header-container a span {
+    display: inline-block;
+    transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+  
+  .header-container a:hover span {
+    color: #344e41;
+    transform: translate3d(-200%, 0, 0);
+  }
+  
+  /* Presentational Styles */
+    body {
+    display: grid;
+    font-family: 'Poppins', sans-serif;
+    font-size: 27px;
+    line-height: 1.5;
+    height: 100vh;
+    place-items: center;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #344e41;
+    font-weight: 600;
+    vertical-align: top;
+  }
