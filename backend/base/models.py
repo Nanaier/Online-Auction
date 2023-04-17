@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 
 class Lot(models.Model):
@@ -24,6 +25,42 @@ class Lot(models.Model):
     def __str__(self):
         return self.name
 
+
 class Favourites(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     lot_id = models.ForeignKey(Lot, on_delete=models.CASCADE, null=False)
+
+
+class User(models.Model):
+    id = models.AutoField(primary_key=True, editable=False)
+    username = models.CharField(max_length=255, unique=True, null=False)
+    first_name = models.CharField(max_length=60, null=True, blank=True)
+    last_name = models.CharField(max_length=60, null=True, blank=True)
+    email = models.EmailField(max_length=255, unique=True, null=False)
+    phone_number = models.CharField(max_length=20, unique=True, null=False)
+    password = models.CharField(max_length=30, null=False)
+    balance = models.DecimalField(max_digits=15, decimal_places=3, default=0, null=False)
+
+    def __str__(self):
+        return self.username
+
+
+class Bid(models.Model):
+    id = models.AutoField(primary_key=True, editable=False)
+    bidder_id = models.ForeignKey(User, on_delete=models.RESTRICT, null=False)
+    lot_id = models.ForeignKey(Lot, on_delete=models.RESTRICT, null=False)
+    time = models.DateTimeField(auto_now_add=True, null=False)
+    price = models.DecimalField(max_digits=15, decimal_places=3, null=False)
+
+    def __str__(self):
+        return f'Bid #{self.id} by bidder #{self.bidder_id}] on lot #{self.lot_id} was made'
+
+
+class Notification(models.Model):
+    id = models.AutoField(primary_key=True, editable=False)
+    lot_id = models.ForeignKey(Lot, on_delete=models.CASCADE, null=False)
+    time = models.DateTimeField(auto_now_add=True, null=False)
+    content = models.TextField(null=False)
+
+    def __str__(self):
+        return f"Notification #{self.id} on lot #{self.lot_id} - {self.time}"
