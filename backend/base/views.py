@@ -2,8 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Lot, Favourites
-from .lots import lots
+from .models import Lot
 from .serializers import LotSerializer
 
 @api_view(["GET"])
