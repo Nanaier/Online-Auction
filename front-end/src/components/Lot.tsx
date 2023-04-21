@@ -11,7 +11,9 @@ import Skeleton from "@mui/material/Skeleton";
 import Box from "@mui/material/Box";
 import { CircularProgress, IconButton, LinearProgress, Stack } from "@mui/material";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import "../styles/Lot.css";
+import "../styles/Lot.css"; 
+
+
 
 const SingleLot = () => {
   const Loading = () => {
@@ -53,7 +55,7 @@ const SingleLot = () => {
         >
           <Grid item xs={12} sm={6}>
             <img
-              src={`${lot?.image}`}
+              src={ `http://127.0.0.1:8000${lot?.image}`}
               alt="qwer"
               className="photoLot"
             />
@@ -61,7 +63,7 @@ const SingleLot = () => {
           <Grid item xs={12} sm={6} className="containerDesc">
           
             <h1>{`${lot?.name}`}</h1>
-            <h1>Start price: {`${lot?.price}`} $</h1>
+            <h1>Start price: {`${lot?.current_price}`} $</h1>
             <p>{`${lot?.description}`}</p>
             
             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 5}}>

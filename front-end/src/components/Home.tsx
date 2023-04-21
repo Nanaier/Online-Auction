@@ -22,6 +22,8 @@ import { Lot } from "../types/Lot";
 import { Header } from "./Header";
 import "../App.css";
 
+
+
 SwiperCore.use([Navigation, Pagination, Controller, Thumbs]);
 
 const Home = () => {
@@ -66,9 +68,9 @@ const Home = () => {
                       textAlign: "center",
                     }}
                   >
-                    <img className="swiperImages" src={item.image} />
+                    <img className="swiperImages" src={`http://127.0.0.1:8000${item.image}`} />
                     <section>{item.name}</section>
-                    <section>{item.price} $</section>
+                    <section>{item.current_price} $</section>
                     <Button className="btn btn-light">
                       <NavLink to={`/lots/${item.id}`} className="link">
                         Bid now

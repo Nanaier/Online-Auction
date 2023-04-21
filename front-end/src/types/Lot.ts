@@ -3,10 +3,12 @@ export type Status = "active" | "placed" | "sold";
 export interface Lot {
     id: number;
     name: string;
-    price: number;
+    initial_price: number;
+    current_price: number;
     image: string;
-    description: string;
-    isFavourite: boolean;
-    userId: number;
+    auctioneer_id: number;
     status: Status;
+    bidding_start_time: string;
+    bidding_end_time: string;
+    description: string;
   };
