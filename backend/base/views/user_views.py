@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-from .models import Lot, User
-from .serializers import LotSerializer, UserSerializer, UserSerializerWithToken
+from base.models import User
+from base.serializers import UserSerializer, UserSerializerWithToken
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -43,7 +43,7 @@ def registerUser(request):
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data)
     except:
-        message = {'detail': 'User with this email already exists'}
+        message = {'detail': 'User with this email or phone number already exists'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -59,16 +59,4 @@ def getUserProfile(request):
 def getUsers(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
-    return Response(serializer.data)
-
-@api_view(["GET"])
-def getLots(request):
-    lots = Lot.objects.all()
-    serializer = LotSerializer(lots, many=True)
-    return Response(serializer.data)
-
-@api_view(["GET"])
-def getLot(request, pk):
-    lot = Lot.objects.get(id=pk)
-    serializer = LotSerializer(lot, many=False)
     return Response(serializer.data)
