@@ -18,20 +18,18 @@ import axios from "axios";
 import { Lot } from "../../types/Lot";
 import { Preview } from "../Preview/Preview";
 import styles from "./HomePage.module.css";
+import { useAppDispatch, useAppSelector } from "src/redux/hooks";
+import { fetchLots } from "src/redux/reducers/lot";
 
 SwiperCore.use([Navigation, Pagination, Controller, Thumbs]);
 
 const Home = () => {
-  const [lots, setLots] = useState<Lot[]>([]);
-  useEffect(() => {
-    const getLots = async () => {
-      const responce = await axios.get("http://127.0.0.1:8000/api/lots/");
-      setLots(responce.data);
-    };
-    getLots();
-  }, []);
+  const dispatch = useAppDispatch();
 
-  
+  useEffect(() => {
+    dispatch(fetchLots());
+  }, [dispatch]);
+  const lots: Lot[] = useAppSelector((state) => state.lotsReducer);
   return (
     <>
       <Preview/>
