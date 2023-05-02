@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { NavLink } from "react-router-dom";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, {
   Navigation,
@@ -18,9 +15,9 @@ import SwiperCore, {
 import "swiper/css";
 import "swiper/css/navigation";
 import axios from "axios";
-import { Lot } from "../types/Lot";
-import { Header } from "./Header";
-import "../App.css";
+import { Lot } from "../../types/Lot";
+import { Preview } from "../Preview/Preview";
+import styles from "./HomePage.module.css";
 
 SwiperCore.use([Navigation, Pagination, Controller, Thumbs]);
 
@@ -37,15 +34,15 @@ const Home = () => {
   
   return (
     <>
-      <Header/>
-      <div>
+      <Preview/>
+      <Box>
         <p className="featured">Check out the latest lots on our website:</p>
-      </div>
+      </Box>
       <Box
         className="container"
         sx={{ backgroundColor: "background.default", color: "text.primary" }}
       >
-        <div className="swiperHome">
+        <Box className="swiperHome">
           <Swiper
             style={{}}
             id="main"
@@ -66,11 +63,11 @@ const Home = () => {
                       textAlign: "center",
                     }}
                   >
-                    <img className="swiperImages" src={item.image} />
+                    <Box component="img" className={styles['swiperImages']} src={`http://127.0.0.1:8000${item.image}`} />
                     <section>{item.name}</section>
-                    <section>{item.price} $</section>
+                    <section>{item.current_price} $</section>
                     <Button className="btn btn-light">
-                      <NavLink to={`/lots/${item.id}`} className="link">
+                      <NavLink to={`/lots/${item.id}`} className={styles['link']}>
                         Bid now
                       </NavLink>
                     </Button>
@@ -79,7 +76,7 @@ const Home = () => {
               </SwiperSlide>
             ))}
           </Swiper>
-        </div>
+        </Box>
       </Box>
     </>
   );

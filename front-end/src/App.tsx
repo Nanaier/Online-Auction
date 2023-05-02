@@ -1,8 +1,8 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import NavigationBar from "./Navigation/Navigation"; 
-import Home from "./components/Home";
-import SingleLot from "./components/Lot";
+import NavigationBar from "./components/Navbar/Navigation"; 
+import Home from "./components/HomePage/HomePage";
+import SingleLot from "./components/Lot/Lot";
 function App() {
   return (
     <div className="App">
@@ -13,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/lots/:id" element={<SingleLot />} />
+          <Route path="/signin" element={<SingleLot />} />
         </Routes>
       </Router>
     </div>

@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { Lot } from "../types/Lot";
+import { Lot } from "../../types/Lot";
 import { useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import Skeleton from "@mui/material/Skeleton";
 import Box from "@mui/material/Box";
-import { CircularProgress, IconButton, LinearProgress, Stack } from "@mui/material";
+import { IconButton, LinearProgress } from "@mui/material";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import "../styles/Lot.css";
+import styles from"./Lot.module.css";
 
 const SingleLot = () => {
   const Loading = () => {
@@ -42,7 +37,7 @@ const SingleLot = () => {
         <Grid
           container
           spacing={0}
-          className="container"
+          className={styles['container']}
           sx={{
             backgroundColor: "background.default",
             color: "#36395A",
@@ -52,20 +47,21 @@ const SingleLot = () => {
           }}
         >
           <Grid item xs={12} sm={6}>
-            <img
-              src={`${lot?.image}`}
+            <Box
+              component='img'
+              src={`http://127.0.0.1:8000${lot?.image}`}
               alt="qwer"
-              className="photoLot"
+              className={styles['photoLot']}
             />
           </Grid>
           <Grid item xs={12} sm={6} className="containerDesc">
           
             <h1>{`${lot?.name}`}</h1>
-            <h1>Start price: {`${lot?.price}`} $</h1>
+            <h1>Start price: {`${lot?.current_price}`} $</h1>
             <p>{`${lot?.description}`}</p>
             
             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 5}}>
-              <button className="button-30" role="button">Place a bid</button>
+              <button className={styles['button-30']} role="button">Place a bid</button>
               <IconButton>
                   <BookmarkIcon sx={{color:'#36395A'}} />
               </IconButton>
