@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavigationBar from "./components/Navbar/Navigation"; 
 import Home from "./components/HomePage/HomePage";
 import SingleLot from "./components/Lot/Lot";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
+import Profile from "./components/Profile/Profile";
 function App() {
   return (
     <div className="App">
@@ -13,7 +16,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/lots/:id" element={<SingleLot />} />
-          <Route path="/signin" element={<SingleLot />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
     </div>
