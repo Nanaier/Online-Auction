@@ -5,5 +5,6 @@ urlpatterns = [
     path('', views.getLots, name="lots"),
     path('create/', views.createLot, name="createLot"),
     path('<str:pk>/delete/', views.deleteLot, name="deleteLot"),
+    path('<str:pk>/update/', views.updateLot, name="updateLot"),
     path('<str:pk>/', views.getLot, name="lot"),
 ]
