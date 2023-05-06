@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-from base.models import Lot
+from base.models import Lot, Favourites
 from base.serializers import LotSerializer
 
 from rest_framework import status
@@ -101,3 +101,29 @@ def updateLot(request, pk):
         return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
     except KeyError as e:
         return Response({"message":f"Missing required field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(["POST", "DELETE"])
+@permission_classes([IsAuthenticated])
+def favouriteLot(request, pk):
+    user = request.user
+    if request.method == "POST":
+        try:
+            lot = Lot.objects.get(id=pk)
+            favourite, created = Favourites.objects.get_or_create(
+                user_id=user,
+                lot_id=lot
+            )
+            if created:
+                return Response({"message":"Lot was successfully added to favourites!"},  status.HTTP_204_NO_CONTENT)
+            else:
+                return Response({"message":"Lot is already in favourites!"},  status.HTTP_400_BAD_REQUEST)
+        except Lot.DoesNotExist:
+            return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
+        
+    if request.method == "DELETE":
+        try:
+            favourite = Favourites.objects.get(lot_id=pk, user_id=user)
+            favourite.delete()
+            return Response({"message":"Lot was successfully removed from favourites!"},  status.HTTP_204_NO_CONTENT)
+        except Favourites.DoesNotExist:
+            return Response({"message": "Favourite does not exist."}, status.HTTP_404_NOT_FOUND)
