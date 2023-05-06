@@ -44,6 +44,22 @@ def createLot(request):
         if 'description' in data:
             lot.description = data['description']
         lot.save()
-        return Response("Lot was created successfully!")
+        return Response({"message":"Lot was created successfully!"})
     except KeyError as e:
-        return Response(f"Missing required field: {str(e)}", status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message":f"Missing required field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def deleteLot(request, pk):
+    try:
+        lot = Lot.objects.get(id=pk)
+        if lot.auctioneer_id != request.user:
+             return Response({"message": "You are not authorized to delete this item."}, status.HTTP_403_FORBIDDEN)
+        if lot.image:
+            lot.image.delete()
+        lot.delete()
+        return Response({"message":"Lot was deleted successfully!"}, status.HTTP_204_NO_CONTENT)
+    except Lot.DoesNotExist:
+        return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
+    
+       
