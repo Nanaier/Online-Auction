@@ -14,7 +14,7 @@ import axios from "axios";
 const getProfileInfo = async (token: string) => {
   try {
     const responce = await axios.get(
-      "http://127.0.0.1:8000/api/users/users/profile",
+      "http://127.0.0.1:8000/api/users/profile",
       {
         headers: {
           'Content-type': 'application/json',
