@@ -7,6 +7,9 @@ from ..models import Lot, Favourites, Bid
 from ..serializers import LotSerializer, BidSerializer
 
 from rest_framework import status
+from django.utils import timezone
+
+from decimal import Decimal
 
 
 @api_view(["GET"])
@@ -141,7 +144,40 @@ def favouriteLot(request, pk):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def createBid(request, pk):
-    pass
+    user = request.user
+    data = request.data
+
+    try:
+        lot = Lot.objects.get(id=pk)
+    except Lot.DoesNotExist:
+        return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
+
+    price = Decimal(data.get('price'))
+    if price is None:
+        return Response({"message": "Price field is required."}, status.HTTP_400_BAD_REQUEST)
+
+    current_price = lot.current_price
+    initial_price = lot.initial_price
+    if price <= current_price or price <= initial_price:
+        return Response({"message": "Bid price must be higher than the current price or inistial price."},
+                        status.HTTP_400_BAD_REQUEST)
+
+    try:
+        bid = Bid.objects.create(
+            lot_id=lot,
+            bidder_id=user,
+            time=timezone.now(),
+            price=price
+        )
+        bid.save()
+
+        # update the current price of the lot
+        lot.current_price = price
+        lot.save()
+
+        return Response({"message": "Bid was made successfully!"})
+    except KeyError as e:
+        return Response({"message": f"Missing required field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET"])
