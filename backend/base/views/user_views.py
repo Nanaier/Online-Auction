@@ -4,6 +4,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from base.models import User
+from ..models import Lot
+from ..serializers import LotSerializer
 from base.serializers import UserSerializer, UserSerializerWithToken,SingleUserSerializer
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -65,4 +67,12 @@ def getSingleUserProfile(request, pk):
 def getUsers(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def getUserLots(request):
+    user = request.user
+    lots = Lot.objects.filter(auctioneer_id=user)
+    serializer = LotSerializer(lots, many=True)
     return Response(serializer.data)
