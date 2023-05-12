@@ -44,7 +44,7 @@ class Bid(models.Model):
     price = models.DecimalField(max_digits=15, decimal_places=3, null=False)
 
     def __str__(self):
-        return f'Bid #{self.id} by bidder #{self.bidder_id}] on lot #{self.lot_id} was made'
+        return f'Bid #{self.id} by bidder #{self.bidder_id} on lot #{self.lot_id} was made'
 
 
 class Notification(models.Model):
