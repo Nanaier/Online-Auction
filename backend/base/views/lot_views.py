@@ -18,9 +18,12 @@ def getLots(request):
 
 @api_view(["GET"])
 def getLot(request, pk):
-    lot = Lot.objects.get(id=pk)
-    serializer = LotSerializer(lot, many=False)
-    return Response(serializer.data)
+    try:
+        lot = Lot.objects.get(id=pk)
+        serializer = LotSerializer(lot, many=False)
+        return Response(serializer.data)
+    except Lot.DoesNotExist:
+        return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
 
 
 @api_view(["POST"])
