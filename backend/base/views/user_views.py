@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from base.models import User
-from base.serializers import UserSerializer, UserSerializerWithToken
+from base.serializers import UserSerializer, UserSerializerWithToken,SingleUserSerializer
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -52,6 +52,12 @@ def registerUser(request):
 def getUserProfile(request):
     user = request.user
     serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def getSingleUserProfile(request, pk):
+    user = User.objects.get(id=pk)
+    serializer = SingleUserSerializer(user, many=False)
     return Response(serializer.data)
 
 @api_view(["GET"])
