@@ -35,7 +35,7 @@ def createLot(request):
     user = request.user
     # print(request.data) 
     data = request.data
-    if 'bidding_start_time' in data and 'bidding_end_time' in data and 'bidding_start_time' > 'bidding_end_time':
+    if 'bidding_start_time' in data and 'bidding_end_time' in data and (data['bidding_start_time'] > data['bidding_end_time']):
         return Response({"message": f"End bidding time cannot be earlier than start bidding time"}, status=status.HTTP_400_BAD_REQUEST)
     try:
         lot = Lot.objects.create(
@@ -48,9 +48,9 @@ def createLot(request):
         if 'image' in request.FILES:
             image = request.FILES["image"]
             lot.image = image
-        if 'bidding_start_time' in data:
+        if 'bidding_start_time' in data and data['bidding_start_time'] != '':
             lot.bidding_start_time = data['bidding_start_time']
-        if 'bidding_end_time' in data:
+        if 'bidding_end_time' in data and data['bidding_end_time'] != '':
             lot.bidding_end_time = data['bidding_end_time']
         if 'description' in data:
             lot.description = data['description']
