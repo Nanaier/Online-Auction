@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from base.models import Lot, Favourites
-from base.serializers import LotSerializer
+from ..models import Lot, Favourites, Bid
+from ..serializers import LotSerializer, BidSerializer
 
 from rest_framework import status
+
 
 @api_view(["GET"])
 def getLots(request):
@@ -14,11 +15,13 @@ def getLots(request):
     serializer = LotSerializer(lots, many=True)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 def getLot(request, pk):
     lot = Lot.objects.get(id=pk)
     serializer = LotSerializer(lot, many=False)
     return Response(serializer.data)
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -28,11 +31,11 @@ def createLot(request):
     data = request.data
     try:
         lot = Lot.objects.create(
-            name = data['name'],
-            initial_price = data['initial_price'],
-            current_price = data['initial_price'], # setting current price to initial price
-            auctioneer_id = user,
-            status = data['status'],
+            name=data['name'],
+            initial_price=data['initial_price'],
+            current_price=data['initial_price'],  # setting current price to initial price
+            auctioneer_id=user,
+            status=data['status'],
         )
         if 'image' in request.FILES:
             image = request.FILES["image"]
@@ -44,9 +47,10 @@ def createLot(request):
         if 'description' in data:
             lot.description = data['description']
         lot.save()
-        return Response({"message":"Lot was created successfully!"})
+        return Response({"message": "Lot was created successfully!"})
     except KeyError as e:
-        return Response({"message":f"Missing required field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": f"Missing required field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
@@ -54,14 +58,15 @@ def deleteLot(request, pk):
     try:
         lot = Lot.objects.get(id=pk)
         if lot.auctioneer_id != request.user:
-             return Response({"message": "You are not authorized to delete this item."}, status.HTTP_403_FORBIDDEN)
+            return Response({"message": "You are not authorized to delete this item."}, status.HTTP_403_FORBIDDEN)
         if lot.image:
             lot.image.delete()
         lot.delete()
-        return Response({"message":"Lot was deleted successfully!"}, status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Lot was deleted successfully!"}, status.HTTP_204_NO_CONTENT)
     except Lot.DoesNotExist:
         return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
-    
+
+
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
 def updateLot(request, pk):
@@ -70,11 +75,11 @@ def updateLot(request, pk):
     try:
         lot = Lot.objects.get(id=pk)
         if lot.auctioneer_id != user:
-             return Response({"message": "You are not authorized to update this item."}, status.HTTP_403_FORBIDDEN)
+            return Response({"message": "You are not authorized to update this item."}, status.HTTP_403_FORBIDDEN)
         lot.name = data['name']
         lot.initial_price = data['initial_price']
         lot.status = data['status']
-            # if image already exist we should delete it from static/images folder
+        # if image already exist we should delete it from static/images folder
         if lot.image:
             lot.image.delete()
             # checking if optional fields are present, if they are not present, change to None
@@ -96,12 +101,13 @@ def updateLot(request, pk):
         else:
             lot.description = None
         lot.save()
-        return Response({"message":"Lot was updated successfully!"},  status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Lot was updated successfully!"}, status.HTTP_204_NO_CONTENT)
     except Lot.DoesNotExist:
         return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
     except KeyError as e:
-        return Response({"message":f"Missing required field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
-    
+        return Response({"message": f"Missing required field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(["POST", "DELETE"])
 @permission_classes([IsAuthenticated])
 def favouriteLot(request, pk):
@@ -114,16 +120,51 @@ def favouriteLot(request, pk):
                 lot_id=lot
             )
             if created:
-                return Response({"message":"Lot was successfully added to favourites!"},  status.HTTP_204_NO_CONTENT)
+                return Response({"message": "Lot was successfully added to favourites!"}, status.HTTP_204_NO_CONTENT)
             else:
-                return Response({"message":"Lot is already in favourites!"},  status.HTTP_400_BAD_REQUEST)
+                return Response({"message": "Lot is already in favourites!"}, status.HTTP_400_BAD_REQUEST)
         except Lot.DoesNotExist:
             return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
-        
+
     if request.method == "DELETE":
         try:
             favourite = Favourites.objects.get(lot_id=pk, user_id=user)
             favourite.delete()
-            return Response({"message":"Lot was successfully removed from favourites!"},  status.HTTP_204_NO_CONTENT)
+            return Response({"message": "Lot was successfully removed from favourites!"}, status.HTTP_204_NO_CONTENT)
         except Favourites.DoesNotExist:
             return Response({"message": "Favourite does not exist."}, status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def createBid(request, pk):
+    pass
+
+
+@api_view(["GET"])
+def getLotBids(request, pk):
+    try:
+        lot = Lot.objects.get(id=pk)
+
+        bids = Bid.objects.filter(lot_id=lot)
+        serializer = BidSerializer(bids, many=True)
+
+        return Response(serializer.data)
+    except Lot.DoesNotExist:
+        return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["GET"])
+def getLastBid(request, pk):
+    try:
+        lot = Lot.objects.get(id=pk)
+        last_bid = Bid.objects.filter(lot_id=lot).order_by('price').last()
+
+        if last_bid:
+            serializer = BidSerializer(last_bid)
+            return Response(serializer.data)
+        else:
+            return Response({"message": "No bids found for this lot."}, status.HTTP_404_NOT_FOUND)
+
+    except Lot.DoesNotExist:
+        return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
