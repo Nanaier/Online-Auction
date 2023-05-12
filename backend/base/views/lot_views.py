@@ -145,11 +145,14 @@ def createBid(request, pk):
 def getLotBids(request, pk):
     try:
         lot = Lot.objects.get(id=pk)
-
         bids = Bid.objects.filter(lot_id=lot)
-        serializer = BidSerializer(bids, many=True)
 
-        return Response(serializer.data)
+        if bids:
+            serializer = BidSerializer(bids, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({"message": "No bids found for this lot."}, status.HTTP_404_NOT_FOUND)
+
     except Lot.DoesNotExist:
         return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
 
