@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Input from "@mui/material/Input";
 import Box from "@mui/material/Box";
 import styles from "./Profile.module.css";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Grid, LinearProgress, TextField } from "@mui/material";
 import { User } from "src/types/User";
 import CreateLotCard from "../CreateLotCard/CreateLotCard";
@@ -92,7 +90,7 @@ const Profile = () => {
                 variant="standard"
               ></TextField>
               <TextField
-                defaultValue={`${user?.first_name}` ?? ''}
+                defaultValue={`${user?.name}` ?? ''}
                 label="First Name"
                 variant="standard"
               ></TextField>
@@ -111,7 +109,6 @@ const Profile = () => {
                 label="Phone Number"
                 variant="standard"
               ></TextField>
-              <Button>Update</Button>
               <Button onClick={LogOut}>Log out</Button>
             </Box>
             </Box>

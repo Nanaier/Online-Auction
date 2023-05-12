@@ -3,14 +3,11 @@ import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
-import Input from "@mui/material/Input";
 import Box from "@mui/material/Box";
 import styles from "./Login.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "src/redux/hooks";
 import axios from "axios";
-import { authenticate } from "src/redux/reducers/user";
 
 const Login = () => {
 
