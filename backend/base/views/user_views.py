@@ -73,6 +73,6 @@ def getUsers(request):
 @permission_classes([IsAuthenticated])
 def getUserLots(request):
     user = request.user
-    lots = Lot.objects.filter(auctioneer_id=user)
+    lots = Lot.objects.filter(auctioneer_id=user).order_by('-id')
     serializer = LotSerializer(lots, many=True)
     return Response(serializer.data)
