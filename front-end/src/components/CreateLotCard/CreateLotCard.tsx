@@ -8,7 +8,7 @@ import styles from "./CreateLotCard.module.css";
 import { NavLink } from "react-router-dom";
 import { FormControl, Grid, TextField } from "@mui/material";
 import BasicSelect from "../BasicSelect/BasicSelect";
-import { Status } from "src/types/Lot";
+import { Lot, Status } from "src/types/Lot";
 import axios from "axios";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 

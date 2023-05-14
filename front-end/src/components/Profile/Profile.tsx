@@ -9,6 +9,7 @@ import { User } from "src/types/User";
 import CreateLotCard from "../CreateLotCard/CreateLotCard";
 import axios from "axios";
 import UserLotSwiper from "../UserLotSwiper/UserLotSwiper";
+import { Lot } from "src/types/Lot";
 
 const getProfileInfo = async (token: string) => {
   try {
@@ -40,6 +41,7 @@ const Profile = () => {
   const Loading = () => {
     return <LinearProgress />;
   };
+
   const navigate = useNavigate();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState<boolean>(false);
