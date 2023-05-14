@@ -41,6 +41,7 @@ const SingleLot = () => {
       try {
         const responce = await axios.post(
           `http://127.0.0.1:8000/api/lots/${id}/favourite/`,
+          {},
           {
             headers: {
               "Content-type": "application/json",
