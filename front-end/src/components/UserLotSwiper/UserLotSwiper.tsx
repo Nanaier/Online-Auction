@@ -6,7 +6,9 @@ import styles from "./UserLotSwiper.module.css";
 import { Lot } from "../../types/Lot";
 import Card from "@mui/material/Card";
 import { NavLink } from "react-router-dom";
+import ClearIcon from '@mui/icons-material/Clear';
 import axios from "axios";
+import { IconButton } from "@mui/material";
 
 const getUserLots = async (token: string) => {
   try {
@@ -80,7 +82,7 @@ const UserLotSwiper = () => {
               {lots?.map((item) => (
                 <SwiperSlide key={item.id} tag="li">
                   <Card>
-                    <div
+                    <Box
                       style={{
                         display: "flex",
                         flexDirection: "column",
@@ -88,6 +90,14 @@ const UserLotSwiper = () => {
                         textAlign: "center",
                       }}
                     >
+                      <IconButton
+                        sx={{ fontSize: 16, display: 'flex', flexDirection: 'row', alignSelf: 'flex-end', m:'0rem 1rem'}}
+                        onClick={() => {
+                          handleDeleteLot(item.id);
+                        }}
+                      >
+                        <ClearIcon />
+                      </IconButton>
                       <Box
                         component="img"
                         className={styles["swiperImages"]}
@@ -103,15 +113,8 @@ const UserLotSwiper = () => {
                           Update
                         </NavLink>
                       </Button>
-                      <Button
-                        sx={{ fontSize: 16 }}
-                        onClick={() => {
-                          handleDeleteLot(item.id);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </div>
+                      
+                    </Box>
                   </Card>
                 </SwiperSlide>
               ))}

@@ -20,7 +20,7 @@ const getProfileInfo = async (token: string) => {
           'Content-type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     return responce.data;
     
