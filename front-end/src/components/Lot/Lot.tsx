@@ -61,7 +61,7 @@ const SingleLot = () => {
             <p>{`${lot?.description}`}</p>
             
             <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 5}}>
-              <button className={styles['button-30']} role="button">Place a bid</button>
+              <button className={styles['button-30']} role="button" onClick={() => {alert('bid was placed!')}}>Place a bid</button>
               <IconButton>
                   <BookmarkIcon sx={{color:'#36395A'}} />
               </IconButton>

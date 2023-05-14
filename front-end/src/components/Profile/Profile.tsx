@@ -70,6 +70,7 @@ const Profile = () => {
       {loading ? (
         <Loading />
       ) : (
+        <>
         <Grid
           container
           spacing={0}
@@ -92,12 +93,7 @@ const Profile = () => {
               ></TextField>
               <TextField
                 defaultValue={`${user?.name}` ?? ''}
-                label="First Name"
-                variant="standard"
-              ></TextField>
-              <TextField
-                defaultValue={`${user?.last_name}` ?? ''}
-                label="Last Name"
+                label="Name"
                 variant="standard"
               ></TextField>
               <TextField
@@ -110,6 +106,11 @@ const Profile = () => {
                 label="Phone Number"
                 variant="standard"
               ></TextField>
+              <TextField
+                defaultValue={`${user?.balance}` ?? ''}
+                label="Balance"
+                variant="standard"
+              ></TextField>
               <Button onClick={LogOut}>Log out</Button>
             </Box>
             </Box>
@@ -119,12 +120,12 @@ const Profile = () => {
               <CreateLotCard/>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={12}>
-            <Box>
+          
+        </Grid>
+        <Box className={styles["lotsSwiper"]}>
               <UserLotSwiper/>
             </Box>
-            </Grid>
-        </Grid>
+        </>
       )}
     </>
   );
