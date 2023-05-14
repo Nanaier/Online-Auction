@@ -47,6 +47,24 @@ const UserLotSwiper = () => {
     fetchUserLots();
   }, [token]);
 
+    const handleDeleteLot = async (id: number) => {
+        try {
+            const response = await axios.delete(
+            `http://127.0.0.1:8000/api/lots/${id}/delete/`,
+            {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+            },
+            }
+        );
+      console.log(response.data);
+      return response.data;
+
+        } catch(e) {
+            console.log(e);
+        }
+    }
     return (
         <>
         <div>
@@ -87,6 +105,7 @@ const UserLotSwiper = () => {
                         Update
                       </NavLink>
                     </Button>
+                    <Button sx={{ fontSize: 16 }} onClick={() => {handleDeleteLot(item.id)}}>Delete</Button>
                   </div>
                 </Card>
               </SwiperSlide>
