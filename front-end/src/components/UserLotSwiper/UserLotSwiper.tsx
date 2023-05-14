@@ -39,7 +39,7 @@ const UserLotSwiper = () => {
     };
 
     fetchUserLots();
-  }, [token, lots]);
+  }, [token]);
 
   const handleDeleteLot = async (id: number) => {
     try {
@@ -53,6 +53,7 @@ const UserLotSwiper = () => {
         }
       );
       console.log(response.data);
+      setLots(prevLots => prevLots.filter(lot => lot.id !== id));
       return response.data;
     } catch (e) {
       console.log(e);

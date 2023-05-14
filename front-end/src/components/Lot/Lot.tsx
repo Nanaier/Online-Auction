@@ -17,26 +17,50 @@ const SingleLot = () => {
   const { id } = useParams();
   const [lot, setLot] = useState<Lot>();
   const [bids, setBids] = useState<Bid[]>();
+  const [isFavourited, setIsFavourited] = useState<boolean>(false);
 
   useEffect(() => {
+    setLoading(true);
     const getLot = async () => {
-      setLoading(true);
       const responce = await axios.get(`http://127.0.0.1:8000/api/lots/${id}`);
       setLot(responce.data);
-      setLoading(false);
+      
     };
     const getBids = async () => {
-      setLoading(true);
-      const responce1 = await axios.get(`http://127.0.0.1:8000/api/lots/${id}/bids/`);
-      setBids(responce1.data)
-      setLoading(false);
+      
+      const responce1 = await axios.get(
+        `http://127.0.0.1:8000/api/lots/${id}/bids/`
+      );
+      setBids(responce1.data);
+    };
+
+    const checkIfFavourited = async () => {
+      if (localStorage.getItem("token")) {
+        try {
+          const response = await axios.get(
+            `http://127.0.0.1:8000/api/lots/${id}/isFavourite/`,
+            {
+              headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          setIsFavourited(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     };
 
     getLot();
-    getBids();
+    //getBids();
+    checkIfFavourited();
+    setLoading(false);
+    
   }, [id]);
 
-  const handleAddFavourite = async (lot: Lot) => {
+  const handleAddFavourite = async () => {
     if (localStorage.getItem("token")) {
       try {
         const responce = await axios.post(
@@ -49,13 +73,36 @@ const SingleLot = () => {
             },
           }
         );
-        return responce.data;
+        setIsFavourited(true);
+        console.log(responce.data)
       } catch (e) {
         console.log(e);
       }
     }
+    
   };
 
+  const handleRemoveFavourite = async () => {
+    if (localStorage.getItem("token")) {
+      try {
+        const responce = await axios.delete(
+          `http://127.0.0.1:8000/api/lots/${id}/favourite/`,
+          {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setIsFavourited(false);
+        console.log(responce.data)
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    
+  };
+  
   return (
     <>
       {loading ? (
@@ -83,7 +130,7 @@ const SingleLot = () => {
           </Grid>
           <Grid item xs={12} sm={6} className="containerDesc">
             <h1>{`${lot?.name}`}</h1>
-            
+
             <h1>Current price: {`${lot?.current_price}`} $</h1>
             <p>Initial price: {`${lot?.initial_price}`} $</p>
             <p>{`${lot?.description}`}</p>
@@ -104,19 +151,22 @@ const SingleLot = () => {
               >
                 Place a bid
               </button>
-              <IconButton onClick={() => {handleAddFavourite(lot!)}}>
-                <BookmarkIcon sx={{ color: "#36395A" }}  />
-              </IconButton>
+              {!isFavourited ? (
+                <IconButton onClick={handleAddFavourite}>
+                  <BookmarkIcon sx={{ color: "grey" }} />
+                </IconButton>
+              ) : (
+                <IconButton onClick={handleRemoveFavourite}>
+                  <BookmarkIcon sx={{ color: "#36395A" }} />
+                </IconButton>
+              )}
             </Box>
           </Grid>
+          <Grid item xs={12} sm={6}></Grid>
           <Grid item xs={12} sm={6}>
-            
-          </Grid>
-          <Grid item xs={12} sm={6} >
-            {bids?.map((item)=> (
+            {bids?.map((item) => (
               <p key={item.id}> {item.price}</p>
             ))}
-            
           </Grid>
         </Grid>
       )}
