@@ -8,6 +8,7 @@ import { Grid, LinearProgress, TextField } from "@mui/material";
 import { User } from "src/types/User";
 import CreateLotCard from "../CreateLotCard/CreateLotCard";
 import axios from "axios";
+import UserLotSwiper from "../UserLotSwiper/UserLotSwiper";
 
 const getProfileInfo = async (token: string) => {
   try {
@@ -118,6 +119,11 @@ const Profile = () => {
               <CreateLotCard/>
             </Box>
           </Grid>
+          <Grid item xs={12} sm={12}>
+            <Box>
+              <UserLotSwiper/>
+            </Box>
+            </Grid>
         </Grid>
       )}
     </>
