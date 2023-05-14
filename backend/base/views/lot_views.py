@@ -141,6 +141,22 @@ def favouriteLot(request, pk):
             return Response({"message": "Lot was successfully removed from favourites!"}, status.HTTP_204_NO_CONTENT)
         except Favourites.DoesNotExist:
             return Response({"message": "Favourite does not exist."}, status.HTTP_404_NOT_FOUND)
+        
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def isFavouriteLot(request, pk):
+    user = request.user
+    if request.method == "GET":
+        try:
+            lot = Lot.objects.get(id=pk)
+            favourite = Favourites.objects.filter(
+                user_id=user,
+                lot_id=lot
+            ).exists()
+            return Response(favourite)
+        except Lot.DoesNotExist:
+            return Response(False)
 
 
 @api_view(["POST"])

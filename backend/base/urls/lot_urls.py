@@ -7,6 +7,7 @@ urlpatterns = [
     path('<str:pk>/delete/', views.deleteLot, name="deleteLot"),
     path('<str:pk>/update/', views.updateLot, name="updateLot"),
     path('<str:pk>/favourite/', views.favouriteLot, name="favouriteLot"),
+    path('<str:pk>/isFavourite/', views.isFavouriteLot, name="isFavouriteLot"),
     path('<str:pk>/', views.getLot, name="lot"),
 
     path('<str:pk>/bids/create/', views.createBid, name="createBid"),
