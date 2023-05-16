@@ -6,7 +6,7 @@ import styles from "./UserLotSwiper.module.css";
 import { Lot } from "../../types/Lot";
 import Card from "@mui/material/Card";
 import { NavLink } from "react-router-dom";
-import ClearIcon from '@mui/icons-material/Clear';
+import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 import { IconButton } from "@mui/material";
 
@@ -20,7 +20,7 @@ const getUserLots = async (token: string) => {
     });
     return responce.data;
   } catch (e) {
-    console.log(e);
+    //console.log(e);
   }
 };
 
@@ -39,7 +39,7 @@ const UserLotSwiper = () => {
     };
 
     fetchUserLots();
-  }, [token]);
+  }, [token, lots]);
 
   const handleDeleteLot = async (id: number) => {
     try {
@@ -53,7 +53,7 @@ const UserLotSwiper = () => {
         }
       );
       console.log(response.data);
-      setLots(prevLots => prevLots.filter(lot => lot.id !== id));
+      setLots((prevLots) => prevLots.filter((lot) => lot.id !== id));
       return response.data;
     } catch (e) {
       console.log(e);
@@ -92,7 +92,13 @@ const UserLotSwiper = () => {
                       }}
                     >
                       <IconButton
-                        sx={{ fontSize: 16, display: 'flex', flexDirection: 'row', alignSelf: 'flex-end', m:'0rem 1rem'}}
+                        sx={{
+                          fontSize: 16,
+                          display: "flex",
+                          flexDirection: "row",
+                          alignSelf: "flex-end",
+                          m: "0rem 1rem",
+                        }}
                         onClick={() => {
                           handleDeleteLot(item.id);
                         }}
@@ -114,7 +120,6 @@ const UserLotSwiper = () => {
                           Update
                         </NavLink>
                       </Button>
-                      
                     </Box>
                   </Card>
                 </SwiperSlide>

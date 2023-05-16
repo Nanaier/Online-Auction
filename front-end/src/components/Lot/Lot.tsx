@@ -4,7 +4,7 @@ import { Lot } from "../../types/Lot";
 import { useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { IconButton, LinearProgress } from "@mui/material";
+import { IconButton, LinearProgress, Typography } from "@mui/material";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import styles from "./Lot.module.css";
 import { Bid } from "src/types/Bid";
@@ -57,7 +57,7 @@ const SingleLot = () => {
     getBids();
     checkIfFavourited();
     setLoading(false);
-  }, [id]);
+  }, [id, bids]);
 
   const handleAddFavourite = async () => {
     if (localStorage.getItem("token")) {
@@ -99,6 +99,28 @@ const SingleLot = () => {
       }
     }
   };
+
+  const [userNames, setUserNames] = useState<Record<string, string>>({});
+
+  const getUser = async (id: number) => {
+    try {
+      const response = await axios.get<{ name: string }>(
+        `http://127.0.0.1:8000/api/users/${id}/`
+      );
+      const { name } = response.data;
+      setUserNames((prevUserNames) => ({ ...prevUserNames, [id]: name }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    bids?.forEach((item: Bid) => {
+      if (!userNames[item.bidder_id]) {
+        getUser(item.bidder_id);
+      }
+    });
+  }, [bids, userNames]);
 
   return (
     <>
@@ -158,12 +180,40 @@ const SingleLot = () => {
                 </IconButton>
               )}
             </Box>
-          </Grid>
-          <Grid item xs={12} sm={6}></Grid>
-          <Grid item xs={12} sm={6}>
-            {bids?.map((item) => (
-              <p key={item.id}> {item.price}</p>
-            ))}
+
+            <Box
+              sx={{
+                p: "2rem 0rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+              }}
+            >
+              {[...bids]?.reverse().map((item) =>
+                bids?.length >= 1 && bids[0].id === item.id ? (
+                  <Typography
+                    variant="body2"
+                    gap={"1rem"}
+                    key={item.id}
+                    color={"grey"}
+                  >
+                    The lot was initiallly created by{" "}
+                    {userNames[item.bidder_id]} with a starting price of{" "}
+                    {item.price}$
+                  </Typography>
+                ) : bids[bids?.length - 1].id !== item.id ? (
+                  <Typography variant="body2" key={item.id} color={"grey"}>
+                    The bid was placed by {userNames[item.bidder_id]} with a
+                    price of {item.price}$
+                  </Typography>
+                ) : (
+                  <Typography variant="subtitle1" key={item.id}>
+                    The last bid was placed by {userNames[item.bidder_id]} with
+                    a price of {item.price}$
+                  </Typography>
+                )
+              )}
+            </Box>
           </Grid>
         </Grid>
       )}
