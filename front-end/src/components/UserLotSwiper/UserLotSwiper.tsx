@@ -123,10 +123,10 @@ const UserLotSwiper = () => {
                       <section>{item.current_price} $</section>
                       <Button className="btn btn-light">
                         <NavLink
-                          to={`/lots/${item.id}`}
+                          to={`/lots/${item.id}/info`}
                           className={styles["link"]}
                         >
-                          Update
+                          More info
                         </NavLink>
                       </Button>
                     </Box>

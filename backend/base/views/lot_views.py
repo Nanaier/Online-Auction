@@ -231,3 +231,13 @@ def getLastBid(request, pk):
 
     except Lot.DoesNotExist:
         return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
+
+@api_view(["GET"])
+def getLotBidsCount(request, pk):
+    try:
+        lot = Lot.objects.get(id=pk)
+        bid_num = Bid.objects.filter(lot_id=lot).count()
+        bid_num -= 1
+        return  Response(bid_num)
+    except Lot.DoesNotExist:
+        return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
