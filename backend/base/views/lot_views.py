@@ -35,8 +35,6 @@ def createLot(request):
     user = request.user
     # print(request.data) 
     data = request.data
-    if 'bidding_start_time' in data and 'bidding_end_time' in data and (data['bidding_start_time'] > data['bidding_end_time']):
-        return Response({"message": f"End bidding time cannot be earlier than start bidding time"}, status=status.HTTP_400_BAD_REQUEST)
     try:
         lot = Lot.objects.create(
             name=data['name'],
@@ -44,17 +42,22 @@ def createLot(request):
             current_price=data['initial_price'],  # setting current price to initial price
             auctioneer_id=user,
             status=data['status'],
+            bidding_start_time = timezone.now(),
         )
         if 'image' in request.FILES:
             image = request.FILES["image"]
-            lot.image = image
-        if 'bidding_start_time' in data and data['bidding_start_time'] != '':
-            lot.bidding_start_time = data['bidding_start_time']
-        if 'bidding_end_time' in data and data['bidding_end_time'] != '':
-            lot.bidding_end_time = data['bidding_end_time']
+            lot.image = image    
         if 'description' in data:
             lot.description = data['description']
         lot.save()
+        bid = Bid.objects.create(
+            lot_id=lot,
+            bidder_id=user,
+            time=timezone.now(),
+            price=lot.initial_price
+        )
+        bid.save()
+        print(bid)
         return Response({"message": "Lot was created successfully!"})
     except KeyError as e:
         return Response({"message": f"Missing required field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
@@ -128,7 +131,7 @@ def favouriteLot(request, pk):
                 lot_id=lot
             )
             if created:
-                return Response({"message": "Lot was successfully added to favourites!"}, status.HTTP_204_NO_CONTENT)
+                return Response({"message": "Lot was successfully added to favourites!"}, status.HTTP_201_CREATED)
             else:
                 return Response({"message": "Lot is already in favourites!"}, status.HTTP_400_BAD_REQUEST)
         except Lot.DoesNotExist:

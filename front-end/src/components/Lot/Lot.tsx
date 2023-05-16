@@ -16,7 +16,7 @@ const SingleLot = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { id } = useParams();
   const [lot, setLot] = useState<Lot>();
-  const [bids, setBids] = useState<Bid[]>();
+  const [bids, setBids] = useState<Bid[]>([]);
   const [isFavourited, setIsFavourited] = useState<boolean>(false);
 
   useEffect(() => {
@@ -24,14 +24,14 @@ const SingleLot = () => {
     const getLot = async () => {
       const responce = await axios.get(`http://127.0.0.1:8000/api/lots/${id}`);
       setLot(responce.data);
-      
     };
     const getBids = async () => {
-      
-      const responce1 = await axios.get(
-        `http://127.0.0.1:8000/api/lots/${id}/bids/`
-      );
-      setBids(responce1.data);
+      try {
+        const responce1 = await axios.get(
+          `http://127.0.0.1:8000/api/lots/${id}/bids/`
+        );
+        setBids(responce1.data);
+      } catch (error) {}
     };
 
     const checkIfFavourited = async () => {
@@ -54,10 +54,9 @@ const SingleLot = () => {
     };
 
     getLot();
-    //getBids();
+    getBids();
     checkIfFavourited();
     setLoading(false);
-    
   }, [id]);
 
   const handleAddFavourite = async () => {
@@ -74,12 +73,11 @@ const SingleLot = () => {
           }
         );
         setIsFavourited(true);
-        console.log(responce.data)
+        console.log(responce.data);
       } catch (e) {
         console.log(e);
       }
     }
-    
   };
 
   const handleRemoveFavourite = async () => {
@@ -95,14 +93,13 @@ const SingleLot = () => {
           }
         );
         setIsFavourited(false);
-        console.log(responce.data)
+        console.log(responce.data);
       } catch (e) {
         console.log(e);
       }
     }
-    
   };
-  
+
   return (
     <>
       {loading ? (
