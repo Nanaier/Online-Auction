@@ -1,18 +1,16 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Input from "@mui/material/Input";
 import Box from "@mui/material/Box";
 import styles from "./CreateLotCard.module.css";
-import { NavLink } from "react-router-dom";
 import { FormControl, Grid, TextField } from "@mui/material";
-import BasicSelect from "../BasicSelect/BasicSelect";
-import { Lot, Status } from "src/types/Lot";
 import axios from "axios";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
+import SnackBar from "../SnackBar/Snackbar";
 
 const CreateLotCard = () => {
+  const [open, setOpen] = useState<boolean>(false);
   const handleCreateLot = async (
     name: string,
     price: number,
@@ -42,6 +40,8 @@ const CreateLotCard = () => {
         );
         console.log(response.data);
         return response.data;
+      } else {
+        setOpen(true);
       }
     } catch (e) {
       console.log(e);
@@ -115,6 +115,11 @@ const CreateLotCard = () => {
           </Button>
         </FormControl>
       </Card>
+      <SnackBar
+        setOpen={setOpen}
+        open={open}
+        message="Price and Name are required fields"
+      />
     </Box>
   );
 };

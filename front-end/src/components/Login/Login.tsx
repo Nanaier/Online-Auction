@@ -8,29 +8,31 @@ import styles from "./Login.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
 import axios from "axios";
+import SnackBar from "../SnackBar/Snackbar";
 
 const Login = () => {
-
   const navigate = useNavigate();
+  const [open, setOpen] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigation = useNavigate();
   useEffect(() => {
-    if (localStorage.getItem('token')) navigation("/profile");
+    if (localStorage.getItem("token")) navigation("/profile");
   }, [navigation]);
   const handleLogin = async (email: string, password: string) => {
-  try {
-    const responce = await axios.post(
-      "http://127.0.0.1:8000/api/users/login/",
-      { username: email, password: password }
-    );
-    const { token } = responce.data;
-    localStorage.setItem("token", token);
-    navigate("/profile");
-  } catch (e) {
-    console.log(e);
-  }
-};
+    try {
+      const responce = await axios.post(
+        "http://127.0.0.1:8000/api/users/login/",
+        { username: email, password: password }
+      );
+      const { token } = responce.data;
+      localStorage.setItem("token", token);
+      navigate("/profile");
+    } catch (e) {
+      setOpen(true);
+      //console.log(e);
+    }
+  };
 
   return (
     <Box className={styles["wraper"]}>
@@ -38,30 +40,37 @@ const Login = () => {
         <Typography variant="h3">Login</Typography>
         <Box className={styles["box"]}>
           <FormControl>
-          <Box className={styles["column"]}>
-            <TextField
-              label="Username"
-              itemID="username"
-              variant="standard"
-              required
-              sx={{ fontSize: 20 }}
-              onChange={(e) => {
-                setEmail(e.target.value);
+            <Box className={styles["column"]}>
+              <TextField
+                label="Username"
+                itemID="username"
+                variant="standard"
+                required
+                sx={{ fontSize: 20 }}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+              <TextField
+                label="Password"
+                itemID="password"
+                type="password"
+                variant="standard"
+                required
+                sx={{ fontSize: 20 }}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+            </Box>
+            <Button
+              sx={{ fontSize: 16 }}
+              onClick={() => {
+                handleLogin(email, password);
               }}
-            />
-            <TextField
-              label="Password"
-              itemID="password"
-              type="password"
-              variant="standard"
-              required
-              sx={{ fontSize: 20 }}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-          </Box>
-          <Button sx={{ fontSize: 16 }} onClick={() => {handleLogin(email, password)}}>login</Button>
+            >
+              login
+            </Button>
           </FormControl>
         </Box>
         <Box className={styles["register-box"]}>
@@ -71,6 +80,11 @@ const Login = () => {
           </NavLink>
         </Box>
       </Card>
+      <SnackBar
+        setOpen={setOpen}
+        open={open}
+        message="Password and username don't match "
+      />
     </Box>
   );
 };

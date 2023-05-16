@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import styles from "./UserLotSwiper.module.css";
+import styles from "./UserFavSwiper.module.css";
 import { Lot } from "../../types/Lot";
 import Card from "@mui/material/Card";
 import { NavLink } from "react-router-dom";
@@ -11,9 +11,9 @@ import axios from "axios";
 import { IconButton } from "@mui/material";
 import AlertDialog from "../Dialog/Dialog";
 
-const getUserLots = async (token: string) => {
+const getUserFavs = async (token: string) => {
   try {
-    const responce = await axios.get("http://127.0.0.1:8000/api/users/lots", {
+    const responce = await axios.get("http://127.0.0.1:8000/api/favourites/", {
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -25,23 +25,23 @@ const getUserLots = async (token: string) => {
   }
 };
 
-const UserLotSwiper = () => {
+const UserFavSwiper = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [idToDelete, setIdToDelete] = useState<number>();
   const [token, setToken] = useState(null);
   const [lots, setLots] = useState<Lot[]>([]);
 
   useEffect(() => {
-    const fetchUserLots = async () => {
+    const fetchUserFavs = async () => {
       const storedToken = localStorage.getItem("token");
       if (storedToken) {
         setToken(token);
-        const userLots = await getUserLots(localStorage.getItem("token")!);
+        const userLots = await getUserFavs(localStorage.getItem("token")!);
         setLots(userLots);
       }
     };
 
-    fetchUserLots();
+    fetchUserFavs();
   }, [token, lots]);
 
   const handleAlertDialog = async (id: number) => {
@@ -49,21 +49,20 @@ const UserLotSwiper = () => {
     setIdToDelete(id);
   };
 
-  const handleDeleteLot = async (id: number) => {
+  const handleDeleteFav = async (id: number) => {
     setOpen(true);
     try {
-      const response = await axios.delete(
-        `http://127.0.0.1:8000/api/lots/${id}/delete/`,
+      const responce = await axios.delete(
+        `http://127.0.0.1:8000/api/lots/${id}/favourite/`,
         {
           headers: {
+            "Content-type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
           },
         }
       );
-      console.log(response.data);
       setLots((prevLots) => prevLots.filter((lot) => lot.id !== id));
-      return response.data;
+      return responce.data;
     } catch (e) {
       console.log(e);
     }
@@ -72,7 +71,7 @@ const UserLotSwiper = () => {
     <>
       <Box>
         <Box>
-          <p className="featured"> YOUR LOTS: </p>
+          <p className="featured"> YOUR FAVOURITES: </p>
         </Box>
 
         <Box
@@ -126,7 +125,7 @@ const UserLotSwiper = () => {
                           to={`/lots/${item.id}`}
                           className={styles["link"]}
                         >
-                          Update
+                          Go to
                         </NavLink>
                       </Button>
                     </Box>
@@ -140,12 +139,12 @@ const UserLotSwiper = () => {
       <AlertDialog
         setOpen={setOpen}
         open={open}
-        message="Are you sure you want to delete this lot permanently "
-        handleOpen={handleDeleteLot}
+        message="Are you sure you want to delete this lot from your favourites?"
+        handleOpen={handleDeleteFav}
         id={idToDelete!}
       />
     </>
   );
 };
 
-export default UserLotSwiper;
+export default UserFavSwiper;
