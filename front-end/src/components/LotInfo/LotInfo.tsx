@@ -96,7 +96,7 @@ const LotInfo = () => {
                 gap: 5,
               }}
             >
-            {lot?.status === 'active' && (
+            {lot?.status === 'active' && bidNum !== undefined && bidNum > 0 && (
             <button
                 className={styles["button-30"]}
                 onClick={() => {
