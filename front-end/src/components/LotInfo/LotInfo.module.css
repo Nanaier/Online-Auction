@@ -60,3 +60,9 @@
     box-shadow: #D6D6E7 0 3px 7px inset;
     transform: translateY(2px);
 }
+.button-30:disabled {
+    background: #fff;
+    color: #ccc;
+    cursor: no-drop;
+    transform: translateY(0px);
+}

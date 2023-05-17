@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
-import Card from "@mui/material/Card";
 import axios from "axios";
 import { Lot } from "../../types/Lot";
 import { useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { IconButton, LinearProgress } from "@mui/material";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import { Bid } from "src/types/Bid";
+import {LinearProgress } from "@mui/material";
 
 import styles from "./LotInfo.module.css";
 
@@ -85,7 +82,11 @@ const LotInfo = () => {
             <h2>Current price: {`${lot?.current_price}`} $</h2>
             <p>Initial price: {`${lot?.initial_price}`} $</p>
             <p>{`${lot?.description}`}</p>
-            <h3>{`Bid number: ${bidNum}`}</h3>
+            {bidNum && bidNum >= 1 ? (
+                <h3>{`Bid number: ${bidNum}`}</h3>
+              ) : (
+                <h3>No bids for this lot yet</h3>
+              )}
             <h2 style={{ color: `${lot?.status === 'active' ? 'green' : 'orange'}` }}>Status: {`${lot?.status}`}</h2>
 
             <Box
@@ -96,16 +97,20 @@ const LotInfo = () => {
                 gap: 5,
               }}
             >
-            {lot?.status === 'active' && bidNum !== undefined && bidNum > 0 && (
+            {lot?.status === 'active' && bidNum !== undefined && bidNum > 0 ? (
             <button
-                className={styles["button-30"]}
-                onClick={() => {
+              className={styles["button-30"]}
+              onClick={() => {
                 handleFinishBidding();
-                }}
+              }}
             >
-                Finish bidding
+              Finish bidding
             </button>
-            )}
+          ) :  bidNum === undefined || bidNum < 1 ? (
+            <button className={styles["button-30"]} disabled>
+              Finish bidding
+            </button>
+          ) : (null)}
        
             </Box>
           </Grid>
