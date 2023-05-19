@@ -1,20 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { NavLink } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, {
-  Navigation,
-  Pagination,
-  Controller,
-  Thumbs,
-  type Swiper as SwiperRef,
-} from "swiper";
+import SwiperCore, { Navigation, Pagination, Controller, Thumbs } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
-import axios from "axios";
 import { Lot } from "../../types/Lot";
 import { Preview } from "../Preview/Preview";
 import styles from "./HomePage.module.css";
@@ -32,7 +24,7 @@ const Home = () => {
   const lots: Lot[] = useAppSelector((state) => state.lotsReducer);
   return (
     <>
-      <Preview/>
+      <Preview />
       <Box>
         <p className="featured">Check out the latest lots on our website:</p>
       </Box>
@@ -61,11 +53,18 @@ const Home = () => {
                       textAlign: "center",
                     }}
                   >
-                    <Box component="img" className={styles['swiperImages']} src={`http://127.0.0.1:8000${item.image}`} />
+                    <Box
+                      component="img"
+                      className={styles["swiperImages"]}
+                      src={`http://127.0.0.1:8000${item.image}`}
+                    />
                     <section>{item.name}</section>
                     <section>{item.current_price} $</section>
                     <Button className="btn btn-light">
-                      <NavLink to={`/lots/${item.id}`} className={styles['link']}>
+                      <NavLink
+                        to={`/lots/${item.id}`}
+                        className={styles["link"]}
+                      >
                         Bid now
                       </NavLink>
                     </Button>

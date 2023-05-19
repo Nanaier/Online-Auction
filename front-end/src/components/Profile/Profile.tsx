@@ -9,7 +9,6 @@ import { User } from "src/types/User";
 import CreateLotCard from "../CreateLotCard/CreateLotCard";
 import axios from "axios";
 import UserLotSwiper from "../UserLotSwiper/UserLotSwiper";
-import { Lot } from "src/types/Lot";
 import UserFavSwiper from "../UserFavSwiper/UserFavSwiper";
 
 const getProfileInfo = async (token: string) => {

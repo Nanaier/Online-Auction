@@ -20,9 +20,7 @@ const getUserFavs = async (token: string) => {
       },
     });
     return responce.data;
-  } catch (e) {
-    //console.log(e);
-  }
+  } catch (e) {}
 };
 
 const UserFavSwiper = () => {
@@ -68,7 +66,7 @@ const UserFavSwiper = () => {
     }
   };
   return (
-    <>
+    <Box>
       <Box>
         <Box>
           <p className="featured"> YOUR FAVOURITES: </p>
@@ -143,7 +141,7 @@ const UserFavSwiper = () => {
         handleOpen={handleDeleteFav}
         id={idToDelete!}
       />
-    </>
+    </Box>
   );
 };
 

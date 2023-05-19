@@ -20,9 +20,7 @@ const getUserLots = async (token: string) => {
       },
     });
     return responce.data;
-  } catch (e) {
-    //console.log(e);
-  }
+  } catch (e) {}
 };
 
 const UserLotSwiper = () => {
@@ -69,7 +67,7 @@ const UserLotSwiper = () => {
     }
   };
   return (
-    <>
+    <Box>
       <Box>
         <Box>
           <p className="featured"> YOUR LOTS: </p>
@@ -144,7 +142,7 @@ const UserLotSwiper = () => {
         handleOpen={handleDeleteLot}
         id={idToDelete!}
       />
-    </>
+    </Box>
   );
 };
 
