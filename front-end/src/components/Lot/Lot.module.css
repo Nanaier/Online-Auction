@@ -6,15 +6,15 @@
   }
 
 .photoLot{
-    max-width: 100%;
-    height: auto;
+  width: 100%;
+  height: 60rem;
+  object-fit: cover
 }
 
 .container{
   color: "#36395A"
 }
 
-/* CSS */
 .button-30 {
   align-items: center;
   appearance: none;

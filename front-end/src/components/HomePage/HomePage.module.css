@@ -1,0 +1,17 @@
+.link{
+    color: #000000DE;
+    text-decoration: none;
+  }
+  .swiperImages{
+    width: 175px;
+    height: 175px;
+    object-fit: cover;
+    list-style: none;
+  }
+  
+  @media only screen and (max-width: 770px) {
+    .swiperImages{
+      width: 100px
+    }
+  
+  }

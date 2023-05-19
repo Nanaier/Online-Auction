@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     id = models.AutoField(primary_key=True, editable=False)
-    phone_number = models.CharField(max_length=20, unique=True, null=False)
+    phone_number = models.CharField(max_length=20, unique=True, null=True)
     balance = models.DecimalField(max_digits=15, decimal_places=3, default=0, null=False)
 
 class Lot(models.Model):
@@ -44,7 +44,7 @@ class Bid(models.Model):
     price = models.DecimalField(max_digits=15, decimal_places=3, null=False)
 
     def __str__(self):
-        return f'Bid #{self.id} by bidder #{self.bidder_id}] on lot #{self.lot_id} was made'
+        return f'Bid #{self.id} by bidder #{self.bidder_id} on lot #{self.lot_id} was made'
 
 
 class Notification(models.Model):
