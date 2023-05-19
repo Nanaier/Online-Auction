@@ -9,14 +9,35 @@ import { IconButton, LinearProgress, Typography } from "@mui/material";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import styles from "./Lot.module.css";
 import { Bid } from "src/types/Bid";
+import { User } from "src/types/User";
+import SnackBar from "../SnackBar/Snackbar";
+
+const getProfileInfo = async (token: string) => {
+  try {
+    const responce = await axios.get(
+      "http://127.0.0.1:8000/api/users/profile",
+      {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return responce.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const SingleLot = () => {
   const Loading = () => {
     return <LinearProgress />;
   };
+  const [openMoney, setOpenMoney] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const { id } = useParams();
   const [lot, setLot] = useState<Lot>();
+  const [user, setUser] = useState<User>();
   const [bids, setBids] = useState<Bid[]>([]);
   const [isFavourited, setIsFavourited] = useState<boolean>(false);
   const [bidPrice, setBidPrice] = useState<number>(lot?.current_price!);
@@ -46,6 +67,10 @@ const SingleLot = () => {
           }
         );
         setBids(bidsResponse.data);
+        if (localStorage.getItem("token")) {
+          const responce = await getProfileInfo(localStorage.getItem("token")!);
+          setUser(responce);
+        }
 
         if (localStorage.getItem("token")) {
           const isFavouritedResponse = await axios.get(
@@ -69,7 +94,7 @@ const SingleLot = () => {
   }, [id]);
 
   const handlePlaceBid = async () => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("token") && user?.balance! >= bidPrice) {
       try {
         const response = await axios.post(
           `http://127.0.0.1:8000/api/lots/${id}/bids/create/`,
@@ -90,6 +115,21 @@ const SingleLot = () => {
             },
           }
         );
+        const updatedUser = await axios.put(
+          `http://127.0.0.1:8000/api/balance/withdraw/?sum=${bidPrice}`,
+          {},
+          {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        if (localStorage.getItem("token")) {
+          const responce = await getProfileInfo(localStorage.getItem("token")!);
+          setUser(responce);
+        }
         setBids(bidsResponse.data);
         console.log(response.data);
         setBidPrice(lot?.current_price!);
@@ -97,6 +137,8 @@ const SingleLot = () => {
       } catch (error) {
         console.log(error);
       }
+    } else {
+      setOpenMoney(true);
     }
   };
 
@@ -274,6 +316,11 @@ const SingleLot = () => {
           </Grid>
         </Grid>
       )}
+      <SnackBar
+        setOpen={setOpenMoney}
+        open={openMoney}
+        message="Not enough money on balance"
+      />
     </>
   );
 };
