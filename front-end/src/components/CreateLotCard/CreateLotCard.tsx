@@ -9,7 +9,7 @@ import axios from "axios";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import SnackBar from "../SnackBar/Snackbar";
 
-const CreateLotCard = () => {
+const CreateLotCard = (props: { updateLots: () => Promise<void> }) => {
   const [open, setOpen] = useState<boolean>(false);
   const handleCreateLot = async (
     name: string,
@@ -39,6 +39,9 @@ const CreateLotCard = () => {
           }
         );
         console.log(response.data);
+        if (props.updateLots) {
+          props.updateLots();
+        }
         return response.data;
       } else {
         setOpen(true);

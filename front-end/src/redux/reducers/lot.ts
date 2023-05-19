@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 import { Lot } from "src/types/Lot";
-import LOCAL_STORAGE_KEYS from "src/types/local-storage-keys";
 
 const initialState: Lot[] = [];
 

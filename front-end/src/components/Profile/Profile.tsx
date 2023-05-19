@@ -10,6 +10,7 @@ import CreateLotCard from "../CreateLotCard/CreateLotCard";
 import axios from "axios";
 import UserLotSwiper from "../UserLotSwiper/UserLotSwiper";
 import UserFavSwiper from "../UserFavSwiper/UserFavSwiper";
+import { Lot } from "src/types/Lot";
 
 const getProfileInfo = async (token: string) => {
   try {
@@ -27,6 +28,19 @@ const getProfileInfo = async (token: string) => {
     console.log(e);
   }
 };
+const getUserLots = async (token: string) => {
+  try {
+    const responce = await axios.get("http://127.0.0.1:8000/api/users/lots", {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return responce.data;
+  } catch (e) {
+    //console.log(e);
+  }
+};
 
 const Profile = () => {
   const LogOut = () => {
@@ -35,15 +49,23 @@ const Profile = () => {
     setUser(undefined);
     navigate("/");
   };
-
+  const fetchUserLots = async () => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+      const userLots = await getUserLots(localStorage.getItem("token")!);
+      setUserLots(userLots);
+    }
+  };
   const Loading = () => {
     return <LinearProgress />;
   };
 
   const navigate = useNavigate();
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState<User>();
+  const [userLots, setUserLots] = useState<Lot[]>();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -114,12 +136,12 @@ const Profile = () => {
             </Grid>
             <Grid item xs={12} sm={9}>
               <Box>
-                <CreateLotCard />
+                <CreateLotCard updateLots={fetchUserLots} />
               </Box>
             </Grid>
           </Grid>
           <Box className={styles["lotsSwiper"]}>
-            <UserLotSwiper />
+            <UserLotSwiper userLots={userLots!} />
           </Box>
 
           <Box className={styles["lotsSwiper"]}>

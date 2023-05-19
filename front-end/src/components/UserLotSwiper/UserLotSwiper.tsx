@@ -20,10 +20,12 @@ const getUserLots = async (token: string) => {
       },
     });
     return responce.data;
-  } catch (e) {}
+  } catch (e) {
+    //console.log(e);
+  }
 };
 
-const UserLotSwiper = () => {
+const UserLotSwiper = ({ userLots }: { userLots: Lot[] }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [idToDelete, setIdToDelete] = useState<number>();
   const [token, setToken] = useState(null);
@@ -40,7 +42,10 @@ const UserLotSwiper = () => {
     };
 
     fetchUserLots();
-  }, [token, lots]);
+  }, [token]);
+  useEffect(() => {
+    setLots(userLots);
+  }, [userLots]);
 
   const handleAlertDialog = async (id: number) => {
     setOpen(true);
@@ -67,7 +72,7 @@ const UserLotSwiper = () => {
     }
   };
   return (
-    <Box>
+    <>
       <Box>
         <Box>
           <p className="featured"> YOUR LOTS: </p>
@@ -142,7 +147,7 @@ const UserLotSwiper = () => {
         handleOpen={handleDeleteLot}
         id={idToDelete!}
       />
-    </Box>
+    </>
   );
 };
 

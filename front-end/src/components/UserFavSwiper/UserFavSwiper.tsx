@@ -40,7 +40,7 @@ const UserFavSwiper = () => {
     };
 
     fetchUserFavs();
-  }, [token, lots]);
+  }, [token]);
 
   const handleAlertDialog = async (id: number) => {
     setOpen(true);
