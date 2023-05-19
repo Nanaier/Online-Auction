@@ -11,6 +11,7 @@ import axios from "axios";
 import UserLotSwiper from "../UserLotSwiper/UserLotSwiper";
 import UserFavSwiper from "../UserFavSwiper/UserFavSwiper";
 import { Lot } from "src/types/Lot";
+import SnackBar from "../SnackBar/Snackbar";
 
 const getProfileInfo = async (token: string) => {
   try {

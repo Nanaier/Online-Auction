@@ -10,6 +10,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 import { IconButton } from "@mui/material";
 import AlertDialog from "../Dialog/Dialog";
+import SnackBar from "../SnackBar/Snackbar";
 
 const getUserLots = async (token: string) => {
   try {
@@ -26,6 +27,7 @@ const getUserLots = async (token: string) => {
 };
 
 const UserLotSwiper = ({ userLots }: { userLots: Lot[] }) => {
+  const [openError, setOpenError] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [idToDelete, setIdToDelete] = useState<number>();
   const [token, setToken] = useState(null);
@@ -68,7 +70,7 @@ const UserLotSwiper = ({ userLots }: { userLots: Lot[] }) => {
       setLots((prevLots) => prevLots.filter((lot) => lot.id !== id));
       return response.data;
     } catch (e) {
-      console.log(e);
+      setOpenError(true);
     }
   };
   return (
@@ -146,6 +148,11 @@ const UserLotSwiper = ({ userLots }: { userLots: Lot[] }) => {
         message="Are you sure you want to delete this lot permanently "
         handleOpen={handleDeleteLot}
         id={idToDelete!}
+      />
+      <SnackBar
+        setOpen={setOpenError}
+        open={openError}
+        message="Lot with bids cannot be deleted from your personal account!"
       />
     </>
   );

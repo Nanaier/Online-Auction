@@ -44,6 +44,10 @@ const LotInfo = () => {
             },
           }
         );
+        const responce1 = await axios.get(
+          `http://127.0.0.1:8000/api/lots/${id}`
+        );
+        setLot(responce1.data);
         console.log(responce.data);
       } catch (e) {
         console.log(e);

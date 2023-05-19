@@ -60,10 +60,14 @@ def deleteLot(request, pk):
         lot = Lot.objects.get(id=pk)
         if lot.auctioneer_id != request.user:
             return Response({"message": "You are not authorized to delete this item."}, status.HTTP_403_FORBIDDEN)
-        if lot.image:
-            lot.image.delete()
-        lot.delete()
-        return Response({"message": "Lot was deleted successfully!"}, status.HTTP_204_NO_CONTENT)
+        bids = Bid.objects.filter(lot_id=lot)
+        if len(bids) <1:
+            if lot.image:
+                lot.image.delete()
+            lot.delete()
+            return Response({"message": "Lot was deleted successfully!"}, status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({"message": "Lot has bids!"}, status.HTTP_400_BAD_REQUEST)
     except Lot.DoesNotExist:
         return Response({"message": "Lot does not exist."}, status.HTTP_404_NOT_FOUND)
 

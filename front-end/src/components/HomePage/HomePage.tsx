@@ -22,6 +22,7 @@ const Home = () => {
     dispatch(fetchLots());
   }, [dispatch]);
   const lots: Lot[] = useAppSelector((state) => state.lotsReducer);
+  const filtered = lots.filter((item) => item.status !== "sold");
   return (
     <>
       <Preview />
@@ -42,7 +43,7 @@ const Home = () => {
             spaceBetween={50}
             slidesPerView={4}
           >
-            {lots?.map((item) => (
+            {filtered?.map((item) => (
               <SwiperSlide key={item.id} tag="li">
                 <Card>
                   <div
