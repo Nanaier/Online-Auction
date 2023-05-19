@@ -48,14 +48,6 @@ def createLot(request):
         if 'description' in data:
             lot.description = data['description']
         lot.save()
-        bid = Bid.objects.create(
-            lot_id=lot,
-            bidder_id=user,
-            time=timezone.now(),
-            price=lot.initial_price
-        )
-        bid.save()
-        print(bid)
         return Response({"message": "Lot was created successfully!"})
     except KeyError as e:
         return Response({"message": f"Missing required field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
