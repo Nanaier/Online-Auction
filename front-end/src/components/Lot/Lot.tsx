@@ -33,6 +33,7 @@ const SingleLot = () => {
   const Loading = () => {
     return <LinearProgress />;
   };
+  const [message, setMessage] = useState<string>("");
   const [openMoney, setOpenMoney] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const { id } = useParams();
@@ -136,9 +137,12 @@ const SingleLot = () => {
         return response.data;
       } catch (error) {
         console.log(error);
+        setOpenMoney(true);
+        setMessage("The current bid is smaller than previous one");
       }
     } else {
       setOpenMoney(true);
+      setMessage("Not enough money on balance");
     }
   };
 
@@ -316,11 +320,7 @@ const SingleLot = () => {
           </Grid>
         </Grid>
       )}
-      <SnackBar
-        setOpen={setOpenMoney}
-        open={openMoney}
-        message="Not enough money on balance"
-      />
+      <SnackBar setOpen={setOpenMoney} open={openMoney} message={message} />
     </>
   );
 };
